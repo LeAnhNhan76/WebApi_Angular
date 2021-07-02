@@ -4,13 +4,11 @@ import { SystemConstants } from '../../core/common';
 import {map} from 'rxjs/operators';
 import { LoggedInUser } from '../domain';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AuthenService {
   constructor(private _httpClient: HttpClient) {}
 
-  login(username: string, password: string): void {
+  login(username: string, password: string): any {
     let body = 'userName=' + encodeURIComponent(username) +
       '&password=' + encodeURIComponent(password) +
       '&grant_type=password';
@@ -21,12 +19,14 @@ export class AuthenService {
       headers: headers
     }
 
-    this._httpClient.post(SystemConstants.BASE_API + SystemConstants.AUTHEN_URL, body, options).pipe(map((response : any) => {
-       let user : LoggedInUser = response;
-       if(user && user.access_token){
-         localStorage.removeItem(SystemConstants.CURRENT_USER);
-         localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(user));
-       }
+    return this._httpClient.post(SystemConstants.BASE_API + SystemConstants.AUTHEN_URL, body, options).pipe(map((response : any) => {
+      if(response) {
+        let user : LoggedInUser = response;
+        if(user && user.access_token){
+          localStorage.removeItem(SystemConstants.CURRENT_USER);
+          localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(user));
+        }
+      }
     }))
   }
 
