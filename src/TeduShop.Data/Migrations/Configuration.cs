@@ -110,10 +110,10 @@
                 var user = new AppUser()
                 {
                     UserName = "admin",
-                    Email = "admin@tedu.com.vn",
+                    Email = "lenhanasus4@gmail.com",
                     EmailConfirmed = true,
                     BirthDay = DateTime.Now,
-                    FullName = "Bach Ngoc Toan",
+                    FullName = "Le Anh Nhan",
                     Avatar = "/assets/images/img.jpg",
                     Gender = true,
                     Status = true
