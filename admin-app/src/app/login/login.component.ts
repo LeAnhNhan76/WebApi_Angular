@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenService, NotificationService } from '../core/services';
 import { MessageContstants, UrlConstants } from '../core/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,8 @@ export class LoginComponent implements OnInit {
   public loading: boolean = false;
   constructor(private authenService : AuthenService
     , private notificationService: NotificationService
-    , private router: Router) { }
+    , private router: Router
+    , private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
   }
@@ -25,7 +26,15 @@ export class LoginComponent implements OnInit {
       this.authenService.login(this.model.username, this.model.password).subscribe((response: any) => {
         this.notificationService.printSuccessMessage(MessageContstants.LOGIN_OK_MSG);
         setTimeout(() => {
-          this.router.navigate([UrlConstants.HOME]);
+          this.activatedRoute.queryParams.subscribe(params =>{
+            let returnUrl = params['returnUrl'];
+            if(returnUrl){
+              this.router.navigate([returnUrl]);
+            }
+            else{
+              this.router.navigate([UrlConstants.HOME]);
+            }
+          });
         }, 300);
       }
       ,() => {
