@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UrlConstants } from '../core/common';
+import { LoggedInUser } from '../core/domain';
 import { AuthenService } from '../core/services';
 
 @Component({
@@ -10,10 +11,13 @@ import { AuthenService } from '../core/services';
 })
 export class MainComponent implements OnInit {
 
+  public user: LoggedInUser;
   constructor(private authenService: AuthenService
     , private router: Router) { }
 
   ngOnInit(): void {
+    this.user = this.authenService.getLoggedinUser();
+    console.log('user', this.user);
   }
 
   onLogout(): void{
