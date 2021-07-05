@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RoleComponent } from './role.component';
 import { RoleRoutingModule } from './role-routing.module';
 import { DataService, NotificationService, UtilityService } from 'src/app/core/services';
 import { FormsModule } from '@angular/forms';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
   declarations: [
@@ -12,8 +13,13 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     RoleRoutingModule,
-    FormsModule
+    FormsModule,
+    PaginationModule.forRoot()
   ],
-  providers: [DataService, NotificationService, UtilityService]
+  providers: [DataService, NotificationService, UtilityService],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+    NO_ERRORS_SCHEMA
+  ]
 })
 export class RoleModule { }

@@ -25,6 +25,7 @@
     "font-awesome": "^4.7.0",
     "gentelella": "^1.4.0",
     "jquery": "^3.6.0",
+    "ngx-bootstrap": "^6.2.0",
     "nprogress": "^0.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
