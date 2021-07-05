@@ -40,7 +40,7 @@ namespace TeduShop.Web.Controllers
                 int totalRow = 0;
                 var query = AppRoleManager.Roles;
                 if (!string.IsNullOrEmpty(filter))
-                    query = query.Where(x => x.Description.Contains(filter));
+                    query = query.Where(x => x.Name.Contains(filter) || x.Description.Contains(filter));
                 totalRow = query.Count();
 
                 var model = query.OrderBy(x => x.Name).Skip((page - 1) * pageSize).Take(pageSize);

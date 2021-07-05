@@ -10,45 +10,35 @@ import { UtilityService } from './utility.service';
 @Injectable()
 export class DataService {
 
-  private _headers: HttpHeaders = new HttpHeaders;
+  private _headers: HttpHeaders;
   constructor(private _httpClient: HttpClient
     , private _authenService : AuthenService
     , private _notificationService : NotificationService
     , private _utilityService : UtilityService ) { }
 
   get(uri: string): any {
-    this._headers.delete("Authorization");
-    this._headers.append("Authorization", "Bearer " + this._authenService.getLoggedinUser().access_token);
-    return this._httpClient.get(uri, {headers: this._headers}).pipe(map(this.extractData));
+    let header = this.getHeader();
+    return this._httpClient.get(SystemConstants.BASE_API + uri, header).pipe(map((response: any) => response));
   }
 
   post(uri: string, data?: any): any {
-    this._headers.delete("Authorization");
-    this._headers.append("Authorization", "Bearer " + this._authenService.getLoggedinUser().access_token);
-    return this._httpClient.post(uri, data, {headers: this._headers}).pipe(map(this.extractData));
+    let header = this.getHeader();
+    return this._httpClient.post(SystemConstants.BASE_API + uri, data, {headers: this._headers}).pipe(map((response: any) => response));
   }
 
   put(uri: string, data?: any): any {
-    this._headers.delete("Authorization");
-    this._headers.append("Authorization", "Bearer " + this._authenService.getLoggedinUser().access_token);
-    return this._httpClient.put(uri, data, {headers: this._headers}).pipe(map(this.extractData));
+    let header = this.getHeader();
+    return this._httpClient.put(SystemConstants.BASE_API + uri, data, {headers: this._headers}).pipe(map((response: any) => response));
   }
 
   delete(uri: string, key: string, id: string): any{
-    this._headers.delete("Authorization");
-    this._headers.append("Authorization", "Bearer " + this._authenService.getLoggedinUser().access_token);
-    return this._httpClient.delete(uri + "/?" + key + "=" + id, {headers: this._headers}).pipe(map(this.extractData));
+    let header = this.getHeader();
+    return this._httpClient.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, {headers: this._headers}).pipe(map((response: any) => response));
   }
 
   postFile(uri: string, data?: any): any {
-    let newHeaders = new HttpHeaders;
-    newHeaders.append("Authorization", "Bearer " + this._authenService.getLoggedinUser().access_token);
-    return this._httpClient.post(uri, data, {headers: this._headers}).pipe(map(this.extractData));
-  }
-
-  private extractData(response: any): any{
-    let body = JSON.parse(response);
-    return body || {};
+    let header = this.getHeader();
+    return this._httpClient.post(SystemConstants.BASE_API + uri, data, {headers: this._headers}).pipe(map((response: any) => response));
   }
 
   public handleError(error: any): any {
@@ -65,5 +55,17 @@ export class DataService {
         return Observable.throw(errMsg);
     }
 
+  }
+
+  getToken(): string{
+    return this._authenService.getLoggedinUser().access_token;
+  }
+
+  getHeader(): any{
+    return {
+      headers: new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .set('Authorization',  `Bearer ${this.getToken()}`)
+    };
   }
 }
