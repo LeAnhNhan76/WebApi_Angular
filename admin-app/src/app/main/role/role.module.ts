@@ -5,6 +5,7 @@ import { RoleRoutingModule } from './role-routing.module';
 import { DataService, NotificationService, UtilityService } from 'src/app/core/services';
 import { FormsModule } from '@angular/forms';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     CommonModule,
     RoleRoutingModule,
     FormsModule,
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    ModalModule.forRoot()
   ],
   providers: [DataService, NotificationService, UtilityService],
   schemas: [
