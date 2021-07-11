@@ -42,13 +42,10 @@ export class DataService {
         this._utilityService.navigateToLogin();
     }
     else {
-        let errMsg = (error.message) ? error.message :
+        let errMsg = (error.error.Message) ? error.error.Message :
             error.status ? `${error.status} - ${error.statusText}` : 'Lỗi hệ thống';
         this._notificationService.printErrorMessage(errMsg);
-
-        return Observable.throw(errMsg);
     }
-
   }
 
   getToken(): string{

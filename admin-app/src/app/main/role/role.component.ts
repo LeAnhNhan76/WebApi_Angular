@@ -17,6 +17,8 @@ export class RoleComponent implements OnInit {
   public roles: any[];
   public totalRows: number = 0;
   public entity: any;
+  public isDisabledUpdateButton: boolean = false;
+
   constructor(private dataService: DataService, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
@@ -49,14 +51,17 @@ export class RoleComponent implements OnInit {
   onShowAddModal(): void{
     this.entity = {};
     this.modalAddEdit.show();
+    this.isDisabledUpdateButton = false;
   }
 
   onShowEditModal(id: any): void{
-    this.onGetRoleDetail(id);
+    this.onLoadRoleDetail(id);
     this.modalAddEdit.show();
+    this.isDisabledUpdateButton = false;
   }
 
-  onSaveChange(): void{
+  onSaveChange(form: any): void{
+    this.isDisabledUpdateButton = true;
     if(!this.entity.Id || this.entity.Id === undefined){
       this.dataService.post('/api/appRole/add', JSON.stringify(this.entity)).subscribe((response: any) => {
         if(response){
@@ -64,10 +69,14 @@ export class RoleComponent implements OnInit {
           setTimeout(() => {
             this.modalAddEdit.hide();
             this.onLoad();
-          }, 2000);
+            form.resetForm();
+          }, 1500);
         }
       }
-      , (error: any) => this.dataService.handleError(error));
+      , (error: any) => {
+        this.isDisabledUpdateButton = false;
+        this.dataService.handleError(error);
+      });
     }
     else{
       this.dataService.put('/api/appRole/update', JSON.stringify(this.entity)).subscribe((response: any) => {
@@ -76,21 +85,24 @@ export class RoleComponent implements OnInit {
           setTimeout(() => {
             this.modalAddEdit.hide();
             this.onLoad();
-          }, 2000);
+            form.resetForm();
+          }, 1500);
         }
       }
-      ,(error: any) => this.dataService.handleError(error));
+      ,(error: any) => {
+        this.isDisabledUpdateButton = false;
+        this.dataService.handleError(error);
+      });
     }
   }
 
-  onGetRoleDetail(id: any){
+  onLoadRoleDetail(id: any){
     this.dataService.get('/api/appRole/detail/' + id).subscribe((response: any) => {
       this.entity = response;
     });
   }
 
   onDeleteItem(id: any): void{
-    console.log('id', id);
     this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG,() => this.onDeleteItemConfirm(id));
   }
   

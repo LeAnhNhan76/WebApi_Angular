@@ -216,6 +216,11 @@ namespace TeduShop.Web.Controllers
                 newAppRole.UpdateApplicationRole(applicationRoleViewModel);
                 try
                 {
+                    var role = AppRoleManager.FindByName(newAppRole.Name);
+                    if(role != null)
+                    {
+                        return request.CreateErrorResponse(HttpStatusCode.BadRequest, "This role is existing. Please add new other role!");
+                    }
                     AppRoleManager.Create(newAppRole);
                     return request.CreateResponse(HttpStatusCode.OK, applicationRoleViewModel);
                 }
@@ -239,6 +244,16 @@ namespace TeduShop.Web.Controllers
                 var appRole = AppRoleManager.FindById(applicationRoleViewModel.Id);
                 try
                 {
+                    if(appRole == null)
+                    {
+                        return request.CreateErrorResponse(HttpStatusCode.BadRequest, "This role is not found");
+                    }
+
+                    if(AppRoleManager.Roles.Any(r => r.Id != appRole.Id && r.Name == applicationRoleViewModel.Name))
+                    {
+                        return request.CreateErrorResponse(HttpStatusCode.BadRequest, "This role is existing. Pleased update other role!");
+                    }
+
                     appRole.UpdateApplicationRole(applicationRoleViewModel, "update");
                     AppRoleManager.Update(appRole);
                     return request.CreateResponse(HttpStatusCode.OK, appRole);
