@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageContstants } from 'src/app/core/common';
 import { DataService, NotificationService } from 'src/app/core/services';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular2-dropdown-multiselect';
 
 @Component({
   selector: 'app-user',
@@ -18,10 +19,39 @@ export class UserComponent implements OnInit {
   public users: any[];
   public totalRows: number = 0;
   public entity: any;
+  public isDisabledUpdateButton: boolean = false;
+  //public myRoles: string[] = [];
+  public allRoles: IMultiSelectOption[] = [];
+  public roles: any[] = [];
+  public dateOptions: any = {
+    locale: { format: 'DD/MM/YYYY' },
+    alwaysShowCalendars: false,
+    singleDatePicker: true
+  };
+
+  public multiSelectSettings: IMultiSelectSettings = {
+    enableSearch: true,
+    checkedStyle: 'fontawesome',
+    buttonClasses: 'btn btn-default btn-block',
+    dynamicTitleMaxItems: 5,
+    displayAllSelectedText: true
+  };
+
+  public multiSelectTexts: IMultiSelectTexts = {
+    checkAll: 'Select all',
+    uncheckAll: 'Unselect all',
+    checked: 'item selected',
+    checkedPlural: 'items selected',
+    searchPlaceholder: 'Find',
+    defaultTitle: 'Select',
+    allSelected: 'All selected',
+  };
+  
   constructor(private dataService: DataService, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.onLoad();
+    this.onLoadRoles();
   }
 
   onLoad(): void{
@@ -50,16 +80,31 @@ export class UserComponent implements OnInit {
   onShowAddModal(): void{
     this.entity = {};
     this.modalAddEdit.show();
+    this.isDisabledUpdateButton = false;
   }
 
   onShowEditModal(id: any): void{
-    this.onGetRoleDetail(id);
+    this.onLoadUserDetail(id);
     this.modalAddEdit.show();
+    this.isDisabledUpdateButton = false;
+  }
+
+  onLoadRoles(): void{
+    this.dataService.get('/api/appRole/getlistall').subscribe((response: any[]) => {
+      console.log('response', response);
+      this.allRoles = [];
+      for(let role of response){
+        this.allRoles.push({id : role.Name, name: role.Description});
+      }
+    }
+    , (error: any) => this.dataService.handleError(error))
   }
 
   onSaveChange(): void{
+    this.isDisabledUpdateButton = true;
+    console.log('entity', this.entity);
     if(!this.entity.Id || this.entity.Id === undefined){
-      this.dataService.post('/api/appRole/add', JSON.stringify(this.entity)).subscribe((response: any) => {
+      this.dataService.post('/api/appUser/add', JSON.stringify(this.entity)).subscribe((response: any) => {
         if(response){
           this.notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
           setTimeout(() => {
@@ -68,10 +113,13 @@ export class UserComponent implements OnInit {
           }, 2000);
         }
       }
-      , (error: any) => this.dataService.handleError(error));
+      , (error: any) => {
+         this.isDisabledUpdateButton = false;
+         this.dataService.handleError(error);
+      })
     }
     else{
-      this.dataService.put('/api/appRole/update', JSON.stringify(this.entity)).subscribe((response: any) => {
+      this.dataService.put('/api/appUser/update', JSON.stringify(this.entity)).subscribe((response: any) => {
         if(response){
           this.notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
           setTimeout(() => {
@@ -80,12 +128,15 @@ export class UserComponent implements OnInit {
           }, 2000);
         }
       }
-      ,(error: any) => this.dataService.handleError(error));
+      , (error: any) => {
+         this.isDisabledUpdateButton = false;
+         this.dataService.handleError(error);
+      });
     }
   }
 
-  onGetRoleDetail(id: any){
-    this.dataService.get('/api/appRole/detail/' + id).subscribe((response: any) => {
+  onLoadUserDetail(id: any){
+    this.dataService.get('/api/appUser/detail/' + id).subscribe((response: any) => {
       this.entity = response;
     });
   }
@@ -96,9 +147,12 @@ export class UserComponent implements OnInit {
   }
   
   onDeleteItemConfirm(id: any): void{
-    this.dataService.delete('/api/appRole/delete', 'id', id).subscribe((response: any) => {
+    this.dataService.delete('/api/appUser/delete', 'id', id).subscribe((response: any) => {
       this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.onLoad();
     })
+  }
+  onSelectGender(event: any): void{
+    this.entity.Gender = event.target.value;
   }
 }

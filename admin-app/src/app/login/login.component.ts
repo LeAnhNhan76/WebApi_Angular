@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
         this.notificationService.printErrorMessage(MessageContstants.LOGIN_FAILED_MSG);
       })
     }
-    this.loading = false;
   }
 
 }

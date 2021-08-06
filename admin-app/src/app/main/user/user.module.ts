@@ -6,6 +6,8 @@ import { DataService, NotificationService, UtilityService } from 'src/app/core/s
 import { FormsModule } from '@angular/forms';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { MultiselectDropdownModule } from 'angular2-dropdown-multiselect';
+import { Daterangepicker } from 'ng2-daterangepicker';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     CommonModule,
     UserRoutingModule,
     FormsModule,
+    MultiselectDropdownModule,
+    Daterangepicker,
     PaginationModule.forRoot(),
     ModalModule.forRoot()
   ],

@@ -12,7 +12,7 @@ export class RoleComponent implements OnInit {
 
   @ViewChild('modalAddEdit') public modalAddEdit: ModalDirective;
   public pageIndex: number = 1;
-  public pageSize: number = 1;
+  public pageSize: number = 20;
   public filter: string = '';
   public roles: any[];
   public totalRows: number = 0;
