@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -78,6 +79,11 @@ namespace TeduShop.Web.Controllers
             {
                 var roles = await AppUserManager.GetRolesAsync(user.Id);
                 var applicationUserViewModel = Mapper.Map<AppUser, AppUserViewModel>(user);
+                if (!string.IsNullOrEmpty(applicationUserViewModel.BirthDay) 
+                        && DateTime.TryParse(applicationUserViewModel.BirthDay, out var birthDay))
+                {
+                    applicationUserViewModel.BirthDay = birthDay.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                }
                 applicationUserViewModel.Roles = roles;
                 return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
             }

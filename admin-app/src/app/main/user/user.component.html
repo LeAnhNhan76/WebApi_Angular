@@ -109,7 +109,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!isEditAction">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="password" [(ngModel)]="entity.Password" name="password" required minlength="4"
@@ -121,7 +121,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!isEditAction">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Confirm Password</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="password" [(ngModel)]="entity.ConfirmPassword" name="confirmPassword" required validateEqual="password"
@@ -155,7 +155,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="number" [(ngModel)]="entity.PhoneNumber" name="phoneNumber" required minlength="10"
+                            <input type="text" [(ngModel)]="entity.PhoneNumber" name="phoneNumber" required minlength="10"
                                 #phoneNumber="ngModel" class="form-control" />
                             <small [hidden]="phoneNumber.valid || (phoneNumber.pristine && !userForm.submitted)"
                                 class="text-danger">
@@ -180,10 +180,11 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">BirthDay</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" #birthDay="ngModel" daterangepicker [options]="dateOptions" [(ngModel)]="entity.BirthDay" name="birthDay"  class="form-control" >
+                            <input type="text" #birthDay="ngModel" daterangepicker [options]="dateOptions"
+                             (selected)="onSelectBirthDay($event)"  (applyDaterangepicker)="onSelectBirthDay($event)"
+                            [(ngModel)]="entity.BirthDay" name="birthDay"  class="form-control" >
                         </div>
                     </div>
-
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>

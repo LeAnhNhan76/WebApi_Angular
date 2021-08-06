@@ -28,6 +28,7 @@ export class UserComponent implements OnInit {
     alwaysShowCalendars: false,
     singleDatePicker: true
   };
+  public isEditAction: boolean = false;
 
   public multiSelectSettings: IMultiSelectSettings = {
     enableSearch: true,
@@ -81,17 +82,18 @@ export class UserComponent implements OnInit {
     this.entity = {};
     this.modalAddEdit.show();
     this.isDisabledUpdateButton = false;
+    this.isEditAction = false;
   }
 
   onShowEditModal(id: any): void{
     this.onLoadUserDetail(id);
     this.modalAddEdit.show();
     this.isDisabledUpdateButton = false;
+    this.isEditAction = true;
   }
 
   onLoadRoles(): void{
     this.dataService.get('/api/appRole/getlistall').subscribe((response: any[]) => {
-      console.log('response', response);
       this.allRoles = [];
       for(let role of response){
         this.allRoles.push({id : role.Name, name: role.Description});
@@ -102,7 +104,6 @@ export class UserComponent implements OnInit {
 
   onSaveChange(): void{
     this.isDisabledUpdateButton = true;
-    console.log('entity', this.entity);
     if(!this.entity.Id || this.entity.Id === undefined){
       this.dataService.post('/api/appUser/add', JSON.stringify(this.entity)).subscribe((response: any) => {
         if(response){
@@ -142,7 +143,6 @@ export class UserComponent implements OnInit {
   }
 
   onDeleteItem(id: any): void{
-    console.log('id', id);
     this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG,() => this.onDeleteItemConfirm(id));
   }
   
@@ -152,7 +152,12 @@ export class UserComponent implements OnInit {
       this.onLoad();
     })
   }
+
   onSelectGender(event: any): void{
     this.entity.Gender = event.target.value;
+  }
+  
+  onSelectBirthDay(value: any): void{
+    this.entity.BirthDay = value.start.format('DD/MM/yyyy');
   }
 }
