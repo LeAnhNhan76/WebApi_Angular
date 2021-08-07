@@ -3,6 +3,7 @@ import { MessageContstants } from 'src/app/core/common';
 import { DataService, NotificationService } from 'src/app/core/services';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular2-dropdown-multiselect';
+import moment from 'moment';
 
 @Component({
   selector: 'app-user',
@@ -139,6 +140,7 @@ export class UserComponent implements OnInit {
   onLoadUserDetail(id: any){
     this.dataService.get('/api/appUser/detail/' + id).subscribe((response: any) => {
       this.entity = response;
+      this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format('DD/MM/yyyy');
     });
   }
 

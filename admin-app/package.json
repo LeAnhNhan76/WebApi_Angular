@@ -26,6 +26,7 @@
     "font-awesome": "^4.7.0",
     "gentelella": "^1.4.0",
     "jquery": "^3.6.0",
+    "moment": "^2.29.1",
     "ng2-daterangepicker": "^3.0.1",
     "ngx-bootstrap": "^6.2.0",
     "rxjs": "~6.6.0",

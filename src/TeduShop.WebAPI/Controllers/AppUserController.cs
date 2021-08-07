@@ -79,11 +79,11 @@ namespace TeduShop.Web.Controllers
             {
                 var roles = await AppUserManager.GetRolesAsync(user.Id);
                 var applicationUserViewModel = Mapper.Map<AppUser, AppUserViewModel>(user);
-                if (!string.IsNullOrEmpty(applicationUserViewModel.BirthDay) 
-                        && DateTime.TryParse(applicationUserViewModel.BirthDay, out var birthDay))
-                {
-                    applicationUserViewModel.BirthDay = birthDay.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-                }
+                //if (!string.IsNullOrEmpty(applicationUserViewModel.BirthDay) 
+                //        && DateTime.TryParse(applicationUserViewModel.BirthDay, out var birthDay))
+                //{
+                //    applicationUserViewModel.BirthDay = birthDay.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //}
                 applicationUserViewModel.Roles = roles;
                 return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
             }
@@ -144,11 +144,23 @@ namespace TeduShop.Web.Controllers
                     if (result.Succeeded)
                     {
                         var userRoles = await AppUserManager.GetRolesAsync(appUser.Id);
-                        var selectedRole = applicationUserViewModel.Roles.ToArray();
+                        var selectedRoles = applicationUserViewModel.Roles.ToArray();
 
-                        selectedRole = selectedRole ?? new string[] { };
+                        selectedRoles = selectedRoles ?? new string[] { };
 
-                        await AppUserManager.AddToRolesAsync(appUser.Id, selectedRole.Except(userRoles).ToArray());
+                        var removedRoles = userRoles.Except(selectedRoles);
+                        var addedRoles = selectedRoles.Except(userRoles);
+
+                        if (removedRoles.Any())
+                        {
+                            await AppUserManager.RemoveFromRolesAsync(appUser.Id, removedRoles.ToArray());
+                        }
+
+                        if (addedRoles.Any())
+                        {
+                            await AppUserManager.AddToRolesAsync(appUser.Id, addedRoles.ToArray());
+                        }
+
                         return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
                     }
                     else
