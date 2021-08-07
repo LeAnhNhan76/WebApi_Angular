@@ -8,6 +8,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MultiselectDropdownModule } from 'angular2-dropdown-multiselect';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { UploadService } from 'src/app/core/services/upload.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { Daterangepicker } from 'ng2-daterangepicker';
     PaginationModule.forRoot(),
     ModalModule.forRoot()
   ],
-  providers: [DataService, NotificationService, UtilityService],
+  providers: [DataService, NotificationService, UtilityService, UploadService],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
     NO_ERRORS_SCHEMA

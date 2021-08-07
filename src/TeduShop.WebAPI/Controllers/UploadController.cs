@@ -38,15 +38,15 @@ namespace TeduShop.Web.Controllers
 
                         int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB
 
-                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".jpeg" };
                         var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
                         var extension = ext.ToLower();
                         if (!AllowedFileExtensions.Contains(extension))
                         {
 
-                            var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
+                            var message = string.Format("Please Upload image of type .jpg,.gif,.png,.jpeg.");
 
-                            dict.Add("error", message);
+                            dict.Add("Message", message);
                             return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
                         }
                         else if (postedFile.ContentLength > MaxContentLength)
@@ -54,7 +54,7 @@ namespace TeduShop.Web.Controllers
 
                             var message = string.Format("Please Upload a file upto 1 mb.");
 
-                            dict.Add("error", message);
+                            dict.Add("Message", message);
                             return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
                         }
                         else
@@ -96,7 +96,7 @@ namespace TeduShop.Web.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
                 }
                 var res = string.Format("Please Upload a image.");
-                dict.Add("error", res);
+                dict.Add("Message", res);
                 return Request.CreateResponse(HttpStatusCode.NotFound, dict);
 
             }

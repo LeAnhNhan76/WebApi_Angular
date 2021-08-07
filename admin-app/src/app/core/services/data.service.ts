@@ -32,7 +32,11 @@ export class DataService {
   }
 
   postFile(uri: string, data?: any): any {
-    return this._httpClient.post(SystemConstants.BASE_API + uri, data, this.getHeader()).pipe(map((response: any) => response));
+    let newHeader = {
+      headers: new HttpHeaders()
+        .set('Authorization',  `Bearer ${this.getToken()}`)
+    }
+    return this._httpClient.post(SystemConstants.BASE_API + uri, data, newHeader).pipe(map((response: any) => response));
   }
 
   public handleError(error: any): any {

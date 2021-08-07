@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MessageContstants } from 'src/app/core/common';
+import { MessageContstants, SystemConstants } from 'src/app/core/common';
 import { DataService, NotificationService } from 'src/app/core/services';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular2-dropdown-multiselect';
 import moment from 'moment';
+import { UploadService } from 'src/app/core/services/upload.service';
 
 @Component({
   selector: 'app-user',
@@ -12,8 +13,8 @@ import moment from 'moment';
 })
 export class UserComponent implements OnInit {
 
-  
   @ViewChild('modalAddEdit') public modalAddEdit: ModalDirective;
+  @ViewChild('avatar') public avatar: any;
   public pageIndex: number = 1;
   public pageSize: number = 1;
   public filter: string = '';
@@ -30,7 +31,8 @@ export class UserComponent implements OnInit {
     singleDatePicker: true
   };
   public isEditAction: boolean = false;
-
+  public baseFolderPath: string = SystemConstants.BASE_API;
+  
   public multiSelectSettings: IMultiSelectSettings = {
     enableSearch: true,
     checkedStyle: 'fontawesome',
@@ -49,7 +51,7 @@ export class UserComponent implements OnInit {
     allSelected: 'All selected',
   };
   
-  constructor(private dataService: DataService, private notificationService: NotificationService) { }
+  constructor(private dataService: DataService, private notificationService: NotificationService, private uploadService: UploadService) { }
 
   ngOnInit(): void {
     this.onLoad();
@@ -105,6 +107,25 @@ export class UserComponent implements OnInit {
 
   onSaveChange(): void{
     this.isDisabledUpdateButton = true;
+    this.onUploadImage();
+  }
+
+  onUploadImage(): void{
+    let image = this.avatar.nativeElement;
+    if(image.files.length > 0){
+      this.uploadService.postWithFile('/api/upload/saveImage?type=avatar', null, image.files).then((imageUrl: any) => {
+        this.entity.Avatar = imageUrl;
+      })
+      .then(() => {
+        this.onSaveData();
+      })
+    }
+    else{
+      this.onSaveData();
+    }
+  }
+
+  onSaveData(): void{
     if(!this.entity.Id || this.entity.Id === undefined){
       this.dataService.post('/api/appUser/add', JSON.stringify(this.entity)).subscribe((response: any) => {
         if(response){
