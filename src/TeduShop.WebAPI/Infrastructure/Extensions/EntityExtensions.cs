@@ -33,7 +33,7 @@ namespace TeduShop.Web.Infrastructure.Extensions
             productCategory.Name = productCategoryVm.Name;
             productCategory.Description = productCategoryVm.Description;
             productCategory.Alias = productCategoryVm.Alias;
-            productCategory.ParentID = productCategoryVm.ParentID;
+            productCategory.ParentId = productCategoryVm.ParentId;
             productCategory.DisplayOrder = productCategoryVm.DisplayOrder;
             productCategory.HomeOrder = productCategoryVm.HomeOrder;
             productCategory.Image = productCategoryVm.Image;

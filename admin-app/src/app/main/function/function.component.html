@@ -31,7 +31,7 @@
             <div class="x_content">
                 <tree-root #treeFunction [nodes]="functionsHierachy">
                     <ng-template #treeNodeTemplate let-node let-index="index">
-                        <span class="function-name">{{ node.data.Name }}</span>
+                        <span class="root-tree-name">{{ node.data.Name }}</span>
                         <button class="btn btn-xs btn-primary" (click)="onShowPermission(node.data.ID)"><i
                                 class="fa fa-lock" aria-hidden="true"></i></button>
                         <button class="btn btn-xs btn-primary" (click)="onShowEditModal(node.data.ID)"><i

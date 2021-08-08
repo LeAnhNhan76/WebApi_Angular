@@ -16,7 +16,7 @@ namespace TeduShop.Web.Models
 
         public string Description { set; get; }
 
-        public int? ParentID { set; get; }
+        public int? ParentId { set; get; }
         public int? DisplayOrder { set; get; }
 
         public string Image { set; get; }

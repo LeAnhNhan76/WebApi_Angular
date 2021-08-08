@@ -138,7 +138,7 @@ namespace TeduShop.Web.Controllers
                 }
                 else
                 {
-                    if (productCategoryVm.ID == productCategoryVm.ParentID)
+                    if (productCategoryVm.ID == productCategoryVm.ParentId)
                     {
                         response = request.CreateResponse(HttpStatusCode.BadRequest, "Danh mục này không thể làm con chính nó.k");
                     }
@@ -239,7 +239,7 @@ namespace TeduShop.Web.Controllers
             //get all of them from DB
             var allCategorys = _productCategoryService.GetAll();
             //get parent categories
-            IEnumerable<ProductCategory> parentCategorys = allCategorys.Where(c => c.ParentID == null);
+            IEnumerable<ProductCategory> parentCategorys = allCategorys.Where(c => c.ParentId == null);
 
             foreach (var cat in parentCategorys)
             {
@@ -259,7 +259,7 @@ namespace TeduShop.Web.Controllers
         }
         private void GetSubTree(IList<ProductCategory> allCats, ProductCategory parent, IList<ProductCategoryViewModel> items)
         {
-            var subCats = allCats.Where(c => c.ParentID == parent.ID);
+            var subCats = allCats.Where(c => c.ParentId == parent.ID);
             foreach (var cat in subCats)
             {
                 //add this category

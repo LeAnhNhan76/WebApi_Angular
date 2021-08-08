@@ -19,11 +19,4 @@ export class MainComponent implements OnInit {
     this.user = this.authenService.getLoggedinUser();
   }
 
-  onLogout(): void{
-    this.authenService.logout();
-    setTimeout(() => {
-      this.router.navigate([UrlConstants.LOGIN]);  
-    }, 3000);
-  }
-
 }

@@ -48,21 +48,21 @@ namespace TeduShop.Service
 
         public IEnumerable<ProductCategory> GetAll()
         {
-            return _productCategoryRepository.GetAll().OrderBy(x=>x.ParentID);
+            return _productCategoryRepository.GetAll().OrderBy(x=>x.ParentId);
         }
 
         public IEnumerable<ProductCategory> GetAll(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
                 return _productCategoryRepository.GetMulti(x => x.Name.Contains(keyword) || x.Description.Contains(keyword))
-                    .OrderBy(x=>x.ParentID);
+                    .OrderBy(x=>x.ParentId);
             else
-                return _productCategoryRepository.GetAll().OrderBy(x => x.ParentID);
+                return _productCategoryRepository.GetAll().OrderBy(x => x.ParentId);
         }
 
         public IEnumerable<ProductCategory> GetAllByParentId(int parentId)
         {
-            return _productCategoryRepository.GetMulti(x => x.Status && x.ParentID == parentId);
+            return _productCategoryRepository.GetMulti(x => x.Status && x.ParentId == parentId);
         }
 
         public ProductCategory GetById(int id)
