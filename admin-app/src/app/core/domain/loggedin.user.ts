@@ -5,4 +5,6 @@ export class LoggedInUser {
     fullName: string;
     email: string;
     avatar: string;
+    permissions: any;
+    roles: any;
 }

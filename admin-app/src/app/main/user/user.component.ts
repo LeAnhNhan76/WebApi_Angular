@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageContstants, SystemConstants } from 'src/app/core/common';
-import { DataService, NotificationService } from 'src/app/core/services';
+import { AuthenService, DataService, NotificationService, UtilityService } from 'src/app/core/services';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular2-dropdown-multiselect';
 import moment from 'moment';
@@ -51,7 +51,15 @@ export class UserComponent implements OnInit {
     allSelected: 'All selected',
   };
   
-  constructor(private dataService: DataService, private notificationService: NotificationService, private uploadService: UploadService) { }
+  constructor(private dataService: DataService
+    , private notificationService: NotificationService
+    , private uploadService: UploadService
+    , public authenService: AuthenService
+    , private utilityService: UtilityService) {
+      if(!this.authenService.checkAccess('USER')){
+        this.utilityService.navigateToLogin();
+      }
+    }
 
   ngOnInit(): void {
     this.onLoad();

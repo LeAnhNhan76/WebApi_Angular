@@ -1,1 +1,231 @@
-<p>function works!</p>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Functions List</h3>
+    </div>
+
+    <div class="title_right">
+        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." [(ngModel)]="filter"
+                    (keyup.enter)="onLoad()">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" (click)="onLoad()">Search!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><button class="btn btn-success" (click)="onShowAddModal()">Add new</button>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <tree-root #treeFunction [nodes]="functionsHierachy">
+                    <ng-template #treeNodeTemplate let-node let-index="index">
+                        <span class="function-name">{{ node.data.Name }}</span>
+                        <button class="btn btn-xs btn-primary" (click)="onShowPermission(node.data.ID)"><i
+                                class="fa fa-lock" aria-hidden="true"></i></button>
+                        <button class="btn btn-xs btn-primary" (click)="onShowEditModal(node.data.ID)"><i
+                                class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        <button class="btn btn-xs btn-danger" (click)="onDeleteItem(node.data.ID)"><i
+                                class="fa fa-trash"></i></button>
+                    </ng-template>
+                </tree-root>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="dialog-sizes-name1" class="modal-title pull-left">Add/Edit function</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" *ngIf="entity"
+                    (ngSubmit)="addEditForm.valid && onSaveChange()">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-md-3 col-xs-12">Function Code</label>
+                        <div class="col-md-9 col-md-9 col-xs-12">
+                            <input type="hidden" [(ngModel)]="entity.ID" name="idHidden" />
+                            <input type="text" [disabled]="isEditAction" [(ngModel)]="entity.ID" name="id" required
+                                minlength="3" #id="ngModel" class="form-control" />
+                            <small [hidden]="id.valid || (id.pristine && !addEditForm.submitted) || isEditAction"
+                                class="text-danger">
+                                Function code is required and at least 3 characters
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Function Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" [(ngModel)]="entity.Name" name="name" required minlength="3"
+                                #name="ngModel" class="form-control" />
+                            <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                Function name is required and at least 3 characters
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">URL</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" [(ngModel)]="entity.URL" name="url" required #url="ngModel"
+                                class="form-control" />
+                            <small [hidden]="url.valid || (url.pristine && !addEditForm.submitted)" class="text-danger">
+                                URL is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Display Order</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="number" [(ngModel)]="entity.DisplayOrder" name="displayOrder" required
+                                #displayOrder="ngModel" class="form-control" />
+                            <small [hidden]="displayOrder.valid || (displayOrder.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                Display order is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Parent Funtion</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="parentId" [(ngModel)]="entity.ParentId">
+                                <option value="">--Select parent function--</option>
+                                <option *ngFor="let x of functions" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                            <input type="hidden" [(ngModel)]="entity.ParentId" name="parentId" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Icon CSS</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" [(ngModel)]="entity.IconCss" name="iconCss" #iconCss="ngModel"
+                                class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="entity.Status" name="status"
+                                        #status="ngModel" />
+                                    Enable
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Cancel</button>
+                            <button type="submit" class="btn btn-success"
+                                [disabled]="!addEditForm.form.valid || isDisabledUpdateButton">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Modal -->
+
+<!--Permission popup-->
+
+<div bsModal #permissionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Add permission for function</h4>
+                <button type="button" class="close pull-right" (click)="permissionModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left input_mask" novalidate #permissionForm="ngForm"
+                    (ngSubmit)="onSavePermission()">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Role Name
+                                </th>
+                                <th>
+                                    Permission
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let permission of permissions">
+                                <td>
+                                    {{permission.AppRole.Description}}
+                                </td>
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" [(ngModel)]="permission.CanRead"
+                                                [name]="permission.id" [ngModelOptions]="{standalone: true}"> Read
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" [(ngModel)]="permission.CanCreate"
+                                                [name]="permission.id" name="status"
+                                                [ngModelOptions]="{standalone: true}"> Add
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" [(ngModel)]="permission.CanUpdate"
+                                                [name]="permission.id" name="status"
+                                                [ngModelOptions]="{standalone: true}"> Edit
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" [(ngModel)]="permission.CanDelete"
+                                                [name]="permission.id" name="status"
+                                                [ngModelOptions]="{standalone: true}"> Delete
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="permissionModal.hide()" class="btn btn-primary">Cancel</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!permissionForm.form.valid">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Permission popup-->

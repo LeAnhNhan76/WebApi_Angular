@@ -23,7 +23,8 @@
         <div class="x_panel">
             <div class="x_title">
                 <ul class="nav navbar-right panel_toolbox">
-                    <li><button class="btn btn-success" (click)="onShowAddModal()">Add new</button>
+                    <li><button class="btn btn-success" *ngIf="authenService.hasPermission('USER', 'create')" 
+                        (click)="onShowAddModal()">Add new</button>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
@@ -55,8 +56,8 @@
                                 <img [src]="baseFolderPath + user.Avatar" class="small-image" width="128" height="160"/>
                             </td>
                             <td>
-                                <button class="btn btn-primary" (click)="onShowEditModal(user.Id)"><i class="fa fa-pencil-square-o"></i></button>
-                                <button class="btn btn-danger" (click)="onDeleteItem(user.Id)"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-primary" *ngIf="authenService.hasPermission('USER', 'update')" (click)="onShowEditModal(user.Id)"><i class="fa fa-pencil-square-o"></i></button>
+                                <button class="btn btn-danger" *ngIf="authenService.hasPermission('USER', 'delete')" (click)="onDeleteItem(user.Id)"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
                     </tbody>

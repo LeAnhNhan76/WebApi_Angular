@@ -24,12 +24,12 @@ export class UtilityService {
     this._router.navigate([UrlConstants.LOGIN]);
   }
   Unflatten = (arr: any[]): any[] => {
-    let map = [];
+    let map: any = {};
     let roots: any[] = [];
     for (var i = 0; i < arr.length; i += 1) {
       let node = arr[i];
       node.children = [];
-      map[node.Id] = i; // use map to look-up the parents
+      map[node.ID] = i; // use map to look-up the parents
       if (node.ParentId !== null) {
         arr[map[node.ParentId]].children.push(node);
       } else {
