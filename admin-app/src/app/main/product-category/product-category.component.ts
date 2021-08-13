@@ -55,7 +55,7 @@ export class ProductCategoryComponent implements OnInit {
     this.modalAddEdit.show();
     this.isDisabledUpdateButton = false;
   }
-  //Show edit form
+  
   onShowEditModal(id: string) {
     this.onLoadProductCategoryDetail(id);
     this.modalAddEdit.show();
