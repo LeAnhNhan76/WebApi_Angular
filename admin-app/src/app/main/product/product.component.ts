@@ -25,6 +25,8 @@ export class ProductComponent implements OnInit {
   public products: any[];
   public productCategories: any[];
   public isDisabledUpdateButton: boolean = false;
+  public checkedItems: any[];
+  public checkedIds: any[];
 
   constructor(public authenService: AuthenService
     , private dataService: DataService
@@ -122,6 +124,15 @@ export class ProductComponent implements OnInit {
     }
   }
 
+  onDeleteMulti() {
+    this.checkedItems = this.products.filter(x => x.Checked);
+    this.checkedIds = [];
+    for (var i = 0; i < this.checkedItems.length; ++i)
+      this.checkedIds.push(this.checkedItems[i]["ID"]);
+
+    this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => this.onDeleteMultiItemConfirm(this.checkedIds));
+  }
+
   onDeleteItem(id: any): void{
     this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG,() => this.onDeleteItemConfirm(id));
   }
@@ -131,6 +142,13 @@ export class ProductComponent implements OnInit {
       this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.onLoad();
     })
+  }
+
+  onDeleteMultiItemConfirm(checkedIds: any[]): void{
+    this.dataService.delete('/api/product/deletemulti', 'checkedProducts', JSON.stringify(checkedIds)).subscribe((response: any) => {
+      this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+      this.onLoad();
+    }, (error: any) => this.dataService.handleError(error));
   }
 
   onPageChanged(event: any): void {
