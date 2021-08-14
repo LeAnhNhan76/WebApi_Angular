@@ -22,6 +22,7 @@ import { SimpleTinyComponent } from 'src/app/shared/simple-tiny/simple-tiny.comp
     PaginationModule.forRoot(),
     ModalModule.forRoot()
   ],
+  exports: [ SimpleTinyComponent ],
   providers: [ DataService, NotificationService, UtilityService, UploadService, TreeDraggedElement ],
 })
 export class ProductModule { }

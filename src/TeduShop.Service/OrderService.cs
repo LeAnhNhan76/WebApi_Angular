@@ -83,6 +83,13 @@ namespace TeduShop.Service
             }
             if (!string.IsNullOrEmpty(paymentStatus))
                 query = query.Where(x => x.PaymentStatus == paymentStatus);
+
+            if (!string.IsNullOrEmpty(customerName))
+            {
+                var customerNameToLower = customerName.ToLower();
+                query = query.Where(x => x.CustomerName.ToLower().Contains(customerNameToLower));
+            }
+                
             totalRow = query.Count();
             return query.OrderByDescending(x => x.CreatedDate).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
         }
