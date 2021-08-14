@@ -31,6 +31,15 @@ export class DataService {
     return this._httpClient.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, this.getHeader()).pipe(map((response: any) => response));
   }
 
+  deleteWithMultiParams(uri: string, params: any) {
+    
+    var paramStr: string = '';
+    for (let param in params) {
+      paramStr += param + "=" + params[param] + '&';
+    }
+    return this._httpClient.delete(SystemConstants.BASE_API + uri + "/?" + paramStr, this.getHeader()).pipe(map((response: any) => response));
+  }
+
   postFile(uri: string, data?: any): any {
     let newHeader = {
       headers: new HttpHeaders()

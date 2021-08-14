@@ -13,6 +13,9 @@ export class ProductComponent implements OnInit {
   /*Declare modal */
   @ViewChild('addEditModal')  addEditModal: ModalDirective;
   @ViewChild("thumbnailImage") thumbnailImage: any;
+  @ViewChild('imageManageModal') imageManageModal: ModalDirective;
+  @ViewChild('imagePath') imagePath: any;
+  @ViewChild('quantityManageModal') quantityManageModal: ModalDirective;
   /*Product manage */
   public baseFolder: string = SystemConstants.BASE_API;
   public entity: any;
@@ -28,6 +31,18 @@ export class ProductComponent implements OnInit {
   public checkedItems: any[];
   public checkedIds: any[];
 
+  /*Image manage */
+  public imageEntity: any = {};
+  public productImages: any = [];
+
+  /*Quantity manage */
+  public quantityEntity: any = {};
+  public productQuantities: any = [];
+  public sizeId: number | null = null;
+  public colorId: number | null = null;
+  public colors: any[];
+  public sizes: any[];
+  
   constructor(public authenService: AuthenService
     , private dataService: DataService
     , private notificationService: NotificationService
@@ -158,5 +173,95 @@ export class ProductComponent implements OnInit {
 
   onKeyupHandlerContentFunction(e: any) {
     this.entity.Content = e;
+  }
+
+  /*Image management*/
+  onShowImageManage(id: number) {
+    this.imageEntity = {
+      ProductId: id
+    };
+    this.onLoadProductImages(id);
+    this.imageManageModal.show();
+  }
+
+  onLoadProductImages(id: number) {
+    this.dataService.get('/api/productImage/getall?productId=' + id).subscribe((response: any[]) => {
+      this.productImages = response;
+    }, (error: any) => this.dataService.handleError(error));
+  }
+  
+  onDeleteImage(id: number) {
+    this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
+      this.dataService.delete('/api/productImage/delete', 'id', id.toString()).subscribe((response: any) => {
+        this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+        this.onLoadProductImages(this.imageEntity.ProductId);
+      }, (error: any) => this.dataService.handleError(error));
+    });
+  }
+
+  onSaveProductImage() {
+    let fi = this.imagePath.nativeElement;
+      if (fi.files.length > 0) {
+        this.uploadService.postWithFile('/api/upload/saveImage?type=product', null, fi.files).then((imageUrl: any) => {
+          this.imageEntity.Path = imageUrl;
+          this.dataService.post('/api/productImage/add', JSON.stringify(this.imageEntity)).subscribe((response: any) => {
+            this.onLoadProductImages(this.imageEntity.ProductId);
+            this.notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+          });
+        });
+      }
+  }
+
+  /*Quản lý số lượng */
+  onShowQuantityManage(id: number) {
+    this.quantityEntity = {
+      ProductId: id
+    };
+    this.onLoadColors();
+    this.onLoadSizes();
+    this.onLoadProductQuantities(id);
+    this.quantityEntity.ColorId = '';
+    this.quantityEntity.SizeId = '';
+    this.quantityManageModal.show();
+  }
+  
+  onLoadColors() {
+    this.dataService.get('/api/productQuantity/getcolors').subscribe((response: any[]) => {
+      this.colors = response;
+    }, (error: any) => this.dataService.handleError(error));
+  }
+  
+  onLoadSizes() {
+    this.dataService.get('/api/productQuantity/getsizes').subscribe((response: any[]) => {
+      this.sizes = response;
+    }, (error: any) => this.dataService.handleError(error));
+  }
+
+  onLoadProductQuantities(id: number) {
+    this.dataService.get('/api/productQuantity/getall?productId=' + id + '&sizeId=' + this.sizeId + '&colorId=' + this.colorId).subscribe((response: any[]) => {
+      this.productQuantities = response;
+    }, (error: any) => this.dataService.handleError(error));
+  }
+
+  onSaveProductQuantity() {
+    this.dataService.post('/api/productQuantity/add', JSON.stringify(this.quantityEntity)).subscribe((response: any) => {
+      this.onLoadProductQuantities(this.quantityEntity.ProductId);
+      this.quantityEntity = {
+        ProductId: this.quantityEntity.ProductId,
+        ColorId: '',
+        SizeId: ''
+      };
+      this.notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+    }, (error: any) => this.dataService.handleError(error));
+  }
+
+  onDeleteQuantity(productId: number, colorId: string, sizeId: string) {
+    var parameters = { "productId": productId, "sizeId": sizeId, "colorId": colorId };
+    this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
+      this.dataService.deleteWithMultiParams('/api/productQuantity/delete', parameters).subscribe((response: any) => {
+        this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+        this.onLoadProductQuantities(productId);
+      }, (error: any) => this.dataService.handleError(error));
+    });
   }
 }
