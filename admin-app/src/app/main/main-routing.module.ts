@@ -11,7 +11,8 @@ const routes : Routes = [
         {path: 'product-category', loadChildren: () => import('./product-category/product-category.module').then((m) => m.ProductCategoryModule)},
         {path: 'user', loadChildren: () => import('./user/user.module').then((m) => m.UserModule)},
         {path: 'role', loadChildren: () => import('./role/role.module').then((m) => m.RoleModule)},
-        {path: 'order', loadChildren: () => import('./order/order.module').then((m) => m.OrderModule)}
+        {path: 'order', loadChildren: () => import('./order/order.module').then((m) => m.OrderModule)},
+        {path: 'announcement', loadChildren: () => import('./announcement/announcement.module').then((m) => m.AnnouncementModule)}
     ]}
 ]
 
