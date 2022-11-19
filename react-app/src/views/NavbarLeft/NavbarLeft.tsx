@@ -1,8 +1,7 @@
 import './index.scss';
-import NavbarTitle from './Title/Title';
-import NavbarProfile from './Profile/Profile';
 import MenuLeft from './MenuLeft/MenuLeft';
-import { Link } from 'react-router-dom';
+import NavbarProfile from './Profile/Profile';
+import NavbarTitle from './Title/Title';
 
 const propTypes = {}
 

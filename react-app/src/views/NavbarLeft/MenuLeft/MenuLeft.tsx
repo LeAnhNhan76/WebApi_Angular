@@ -1,16 +1,12 @@
-import * as React from 'react';
-import TreeView from '@mui/lab/TreeView';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem';
 import {
-  Home as HomeIcon, 
-  Apps as AppsIcon, 
-  Category as CategoryIcon,
-  Article as ArticleIcon
+  Apps as AppsIcon, Article as ArticleIcon, Category as CategoryIcon, Home as HomeIcon
 } from '@mui/icons-material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import TreeItem from '@mui/lab/TreeItem';
+import TreeView from '@mui/lab/TreeView';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Container } from './styles';
 
 const MenuLeft = () => {
