@@ -1,33 +1,21 @@
-import styled from 'styled-components';
-
 const colors = {
-  Text: '#6e6c6c'
-}
+  $primaryColor: '#8D398E',
+  $textColor: '#FAFAFA',
+  $white: '#FFFFFF',
+  $black: '#000000',
+  $red: '#A4262C',
 
-const MainLayout = {
-  Container: styled.div`
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-    height: 770px;
-    color: rgb(242, 245, 247);
-    background-color: rgb(42, 63, 84);
-  `,
-  LeftSide: styled.div`
-    display: table-cell;
-    width: 300px;
-    min-width: 300px;
-    max-width: 500px;
-    height: 100%;
-  `,
-  RightSide: styled.div`
-    display: table-cell;
-    height: 100%;
-    background: rgb(247, 247, 247);
-    color: ${colors.Text}
-  `
-}
+  $grey10: '#FAF9F8',
+  $grey30: '#EDEBE9',
+  $grey90: '#A19F9D',
+  $grey130: '#605E5C',
+  $grey110: '#8A8886',
+  $grey190: '#201F1E',
+  $grey160: '#323130',
+
+  $borderLight: '#C1C7D0',
+};
 
 export {
-  MainLayout
+  colors
 }

@@ -1,4 +1,4 @@
-import { Container } from "./Styles";
+import { Container } from "./styles";
 
 const NavbarTitle = () => {
   return (

@@ -9,8 +9,9 @@ import {
   Category as CategoryIcon,
   Article as ArticleIcon
 } from '@mui/icons-material';
-import { Container } from './Styles';
+
 import { Link, useNavigate } from 'react-router-dom';
+import { Container } from './styles';
 
 const MenuLeft = () => {
   let navigate = useNavigate();

@@ -1,9 +1,7 @@
-import { Link, Route, Routes } from 'react-router-dom';
-import { MainLayout } from './assets/styles/styles';
-import Home from './views/Home/Home';
-import NavbarLeft from './views/NavbarLeft/NavbarLeft';
-import Product from './views/Product/Product';
-import ProductCategory from './views/ProductCategory/ProductCategory';
+import { MainLayout } from "./assets/styles/layouts";
+import AppBody from "./views/AppBody/AppBody";
+import AppHeader from "./views/AppHeader/AppHeader";
+import NavbarLeft from "./views/NavbarLeft/NavbarLeft";
 
 function App() {
   return (
@@ -13,12 +11,8 @@ function App() {
           <NavbarLeft />
         </MainLayout.LeftSide>
         <MainLayout.RightSide>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/products" element={<Product />} />
-            <Route path="/productcategories" element={<ProductCategory />} />
-          </Routes>
+          <AppHeader />
+          <AppBody />
         </MainLayout.RightSide>
       </MainLayout.Container>
     </div>
