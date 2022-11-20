@@ -16,7 +16,7 @@ using TeduShop.Web.Models;
 namespace TeduShop.Web.Controllers
 {
     [RoutePrefix("api/productCategory")]
-    [Authorize]
+    // [Authorize]
     public class ProductCategoryController : ApiControllerBase
     {
         #region Initialize

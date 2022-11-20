@@ -2,9 +2,22 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TreeItem from '@mui/lab/TreeItem';
 import TreeView from '@mui/lab/TreeView';
+import { useEffect, useState } from 'react';
+import { productCategoryService } from '../../../services/productCategory.service';
 
 export const List = () => {
+  const [items, setItems] = useState<any[]>([]);
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  
+  useEffect(() => {
+    const waiter = async () => {
+      const res  = await productCategoryService.searchProductCategories('', pageIndex, 20);
 
+      console.log('res', res);
+    };
+
+    waiter();
+  },[items]);
 
   return (
     <>
