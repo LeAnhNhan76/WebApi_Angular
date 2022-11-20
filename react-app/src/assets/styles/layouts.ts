@@ -25,6 +25,11 @@ const MainLayout = {
   `
 }
 
+const RightFloat = styled.div`
+  float: right
+`
+
 export {
-  MainLayout
+  MainLayout,
+  RightFloat
 }

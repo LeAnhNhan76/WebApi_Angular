@@ -5,7 +5,6 @@ import ProductCategory from "../ProductCategory/ProductCategory";
 
 const containerStyle : React.CSSProperties = {
   margin: '10px',
-  border: '1px solid'
 }
 
 const AppBody = () => {

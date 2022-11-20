@@ -11,7 +11,7 @@ const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: colors.$white,
-  color: colors.$grey110,
+  color: colors.$grey90,
   '&:hover': {
     backgroundColor: colors.$white,
   },
@@ -56,7 +56,8 @@ type Props = {
 const defaultPlaceholder = 'Search...';
 
 const searchIconStyle: React.CSSProperties = {
-  marginLeft: '3px'
+  marginLeft: '3px',
+  color: colors.$grey90,
 };
 
 export const SearchBox = (props: Props) => {
