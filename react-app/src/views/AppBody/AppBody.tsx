@@ -15,12 +15,14 @@ const AppBody = () => {
       </Container>
        */}
        <div style={containerStyle}>
-        <Routes>
+        <Switch>
+          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/products" element={<Product />} />
             <Route path="/productcategories" element={<ProductCategory />} />
           </Routes>
+        </Switch>
        </div>
     </>
   )
