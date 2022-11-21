@@ -17,11 +17,11 @@ export const List = () => {
     };
 
     waiter();
-  },[items]);
+  },[]);
 
   return (
     <>
-      <TreeView
+      {/* <TreeView
         aria-label="file system navigator"
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
@@ -37,7 +37,7 @@ export const List = () => {
             <TreeItem nodeId="8" label="index.js" />
           </TreeItem>
         </TreeItem>
-      </TreeView>
+      </TreeView> */}
     </>
   );
 }
